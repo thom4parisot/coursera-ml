@@ -1,16 +1,16 @@
-FROM alpine:3.1
+FROM python:2.7-slim
 
 WORKDIR /app
-
-RUN apk add --update python python-dev py-pip build-base
 
 COPY requirements.txt ./
 COPY .env ./
 
-RUN source .env \
+RUN . /app/.env \
+  && apt-get update \
+  && apt-get install -y build-essential \
   && pip install --upgrade -r requirements.txt \
   && pip install https://get.dato.com/GraphLab-Create/1.6/${LICENSE_EMAIL}/${LICENSE_KEY}/GraphLab-Create-License.tar.gz
 
 EXPOSE 8888
 
-CMD ["/bin/ash"]
+CMD ["/bin/bash"]
